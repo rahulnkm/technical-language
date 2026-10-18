@@ -1,0 +1,116 @@
+<!-- Parameter HUD template. Adapt PARAMS + SPEC_TEMPLATE, then pass the whole file to
+     mcp__visualize__show_widget. Self-contained: inline CSS/JS, theme via CSS variables,
+     no external fetches. Replace the example data below with the project's real parameters. -->
+<div class="hud">
+  <div class="hud__controls">
+    <h3 class="hud__h">Parameters</h3>
+    <div id="controls"></div>
+  </div>
+  <div class="hud__spec">
+    <div class="hud__specbar">
+      <h3 class="hud__h">Live spec</h3>
+      <div class="hud__btns">
+        <button id="copyBtn" class="btn">Copy</button>
+        <button id="sendBtn" class="btn btn--primary">Send to chat</button>
+      </div>
+    </div>
+    <pre id="spec" class="spec"></pre>
+  </div>
+</div>
+
+<style>
+  .hud{display:grid;grid-template-columns:minmax(260px,360px) 1fr;gap:16px;font-family:var(--font-sans,system-ui,sans-serif);color:var(--text,#1a1a1a)}
+  @media(max-width:680px){.hud{grid-template-columns:1fr}}
+  .hud__h{font-size:13px;text-transform:uppercase;letter-spacing:.06em;opacity:.6;margin:0 0 12px}
+  .hud__controls,.hud__spec{background:var(--surface,#f7f7f8);border:1px solid var(--border,#e3e3e6);border-radius:12px;padding:16px}
+  .param{margin-bottom:18px}
+  .param__label{font-weight:600;font-size:14px;margin-bottom:8px}
+  .seg{display:flex;flex-wrap:wrap;gap:6px}
+  .seg button{font:inherit;font-size:13px;padding:6px 12px;border:1px solid var(--border,#d8d8dc);background:var(--bg,#fff);border-radius:8px;cursor:pointer;color:inherit}
+  .seg button[aria-pressed="true"]{background:var(--accent,#3b5bdb);border-color:var(--accent,#3b5bdb);color:#fff}
+  .param__affects{font-size:12px;opacity:.65;margin-top:6px;min-height:1em}
+  .hud__specbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .hud__btns{display:flex;gap:8px}
+  .btn{font:inherit;font-size:13px;padding:6px 12px;border:1px solid var(--border,#d8d8dc);background:var(--bg,#fff);border-radius:8px;cursor:pointer;color:inherit}
+  .btn--primary{background:var(--accent,#3b5bdb);border-color:var(--accent,#3b5bdb);color:#fff}
+  .spec{white-space:pre-wrap;font-family:var(--font-mono,ui-monospace,monospace);font-size:13px;line-height:1.55;margin:0;background:var(--bg,#fff);border:1px solid var(--border,#e3e3e6);border-radius:8px;padding:14px;max-height:60vh;overflow:auto}
+</style>
+
+<script>
+  // ── REPLACE THIS BLOCK with the project's real parameters ──────────────
+  // Each param: id, label, options[{value,label,spec,affects}], current.
+  // `spec` = the text fragment injected into SPEC_TEMPLATE at {id}.
+  // `affects` = one-line trade-off shown live under the control.
+  const PARAMS = [
+    { id: "rendering", label: "Rendering strategy", current: "ssr", options: [
+      { value:"ssr", label:"SSR",  spec:"Server-side rendered (Next.js App Router, dynamic)", affects:"Fresh data per request · slower TTFB · strong SEO" },
+      { value:"ssg", label:"SSG",  spec:"Statically generated at build time",                affects:"Fastest loads · data stale until rebuild" },
+      { value:"isr", label:"ISR",  spec:"Incrementally static-regenerated (revalidate window)", affects:"Static speed + periodic freshness" },
+    ]},
+    { id: "db", label: "Database", current: "postgres", options: [
+      { value:"postgres", label:"Postgres", spec:"Postgres (relational, via Prisma)", affects:"Strong consistency · richer queries · more ops" },
+      { value:"sqlite",   label:"SQLite",   spec:"SQLite (embedded file DB)",         affects:"Zero-ops · single-writer · great for local/MVP" },
+    ]},
+    { id: "auth", label: "Auth", current: "session", options: [
+      { value:"session", label:"Sessions", spec:"Cookie-based server sessions",  affects:"Easy revoke · server state needed" },
+      { value:"jwt",     label:"JWT",      spec:"Stateless JWT access tokens",   affects:"Scales statelessly · revocation is harder" },
+    ]},
+  ];
+  // SPEC_TEMPLATE: the Deliverable A text. Use {id} where each param's fragment goes.
+  let SPEC_TEMPLATE =
+`## Project - technical spec
+
+Rendering: {rendering}
+Database:  {db}
+Auth:      {auth}`;
+  // ───────────────────────────────────────────────────────────────────────
+
+  const state = Object.fromEntries(PARAMS.map(p => [p.id, p.current]));
+
+  function fragment(p){ return p.options.find(o => o.value === state[p.id]); }
+  function buildSpec(){
+    let out = SPEC_TEMPLATE;
+    for (const p of PARAMS) out = out.replaceAll("{"+p.id+"}", fragment(p).spec);
+    return out;
+  }
+  function render(){
+    document.getElementById("spec").textContent = buildSpec();
+    for (const p of PARAMS){
+      const hint = document.getElementById("affects-"+p.id);
+      if (hint) hint.textContent = fragment(p).affects;
+    }
+  }
+  function buildControls(){
+    const root = document.getElementById("controls");
+    for (const p of PARAMS){
+      const wrap = document.createElement("div"); wrap.className = "param";
+      wrap.innerHTML = `<div class="param__label">${p.label}</div>`;
+      const seg = document.createElement("div"); seg.className = "seg";
+      for (const o of p.options){
+        const b = document.createElement("button");
+        b.textContent = o.label;
+        b.setAttribute("aria-pressed", String(o.value === state[p.id]));
+        b.onclick = () => {
+          state[p.id] = o.value;
+          seg.querySelectorAll("button").forEach((x,i) =>
+            x.setAttribute("aria-pressed", String(p.options[i].value === state[p.id])));
+          render();
+        };
+        seg.appendChild(b);
+      }
+      wrap.appendChild(seg);
+      const aff = document.createElement("div");
+      aff.className = "param__affects"; aff.id = "affects-"+p.id;
+      wrap.appendChild(aff);
+      root.appendChild(wrap);
+    }
+  }
+
+  document.getElementById("copyBtn").onclick = () => navigator.clipboard.writeText(buildSpec());
+  document.getElementById("sendBtn").onclick = () => {
+    if (typeof sendPrompt === "function") sendPrompt("Build to this tuned spec:\n\n" + buildSpec());
+  };
+
+  buildControls();
+  render();
+</script>
