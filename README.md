@@ -1,16 +1,19 @@
 # technical-language
 
-A Claude Code skill for when you know what you want but not the words a professional would use for it.
+A Claude Code skill for when you know what you want but not the words, or the years of experience, a professional would bring to it. Works in any field.
 
-You describe the thing in plain words. Claude asks you one question at a time until it understands the system, names the kind of expert who solves this for a living, then hands back what that expert would say: the real name for the problem, or a spec written as `property: value unit` that a builder could follow without asking you anything. It ends with a glossary so you can say it yourself next time.
+You describe the thing in plain words. Claude proves it has real expertise in that field before advising, pins down exactly what "done" looks like with you, and then does the work, writes a one-shot prompt, or explains it plainly. Every result is checked the way you would check it yourself.
 
 ## What it does
 
-1. **Topic line.** Decides whether you're pointing at a problem to remove or a result to build.
-2. **Elicitation.** One plain question per turn: what the thing is, one real example, what it should do, what causes the gap, how you'd know it worked, what must not change. For taste questions it shows you an A and a B built from your own material instead of asking.
-3. **Names the professional** whose job this is, and the term they'd use.
-4. **Delivers.** Problem: the conventional name, the mechanism, your instance, a second instance, and the fix as a paste-ready rule. Solution: a parametric spec. No "clean", "tight" or "premium" - only values.
-5. **Teaches.** A glossary, plus the one or two sentences you could have typed to get the same result.
+1. **Topic and field.** Problem to remove, solution to build, or thinking to clarify, and which field's experts solve it.
+2. **Reads first.** Your message, files, pages, repos and saved preferences, so it only asks what it can't find.
+3. **Backtests its expertise.** Finds practitioners with public, checkable results, builds an exam from real cases with known outcomes, hides a third of them, and calls them before looking. Graded against what actually happened, not an AI judge. You see a one-line scorecard.
+4. **Questions and A/B rounds.** One plain question per turn. For judgment calls it shows two short versions from your own material, says what each goes for, and gives its pick. Pass/fail rounds and in/out rounds turn your answers into checks.
+5. **Definition of done.** One screen: "you open X, do Y, see Z", what's in and out, and the locked rules. You approve it. Then it offers to research best practices before writing.
+6. **No-uncertainty gate.** Every requirement has a check, nothing vague is left, and a fresh AI reading only the output has zero questions.
+7. **Delivers.** Does the work and reports each check pass/fail with proof, or writes a one-shot prompt that carries the checks, or explains it plainly. Stops and asks after two failed tries.
+8. **Teaches and remembers.** A glossary, the sentence you could have typed, and saved preferences plus a running track record of its calls, so each use needs fewer questions.
 
 ## Install
 
@@ -30,8 +33,8 @@ Then type `/technical-language` in Claude Code, or just describe something in la
 
 ## Notes
 
-- Visual A/B rounds and the parameter HUD use the inline widget tool (`mcp__visualize__*`) in the Claude desktop app. Without it, the skill describes both versions in text.
-- The skill answers from Claude's own knowledge first and only sends out research subagents if you say yes.
+- Visual A/B rounds and the parameter HUD use the inline widget tool (`mcp__visualize__*`) in the Claude desktop app. Without it, the skill renders a private Artifact or a local HTML file, and only falls back to text when nothing can render.
+- The backtest uses web search on its own, scaled to the stakes. Best-practice research for the spec only runs if you say yes. Saved preferences and track records live in `~/.claude/technical-language/`.
 
 ## License
 

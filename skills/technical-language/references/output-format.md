@@ -1,6 +1,6 @@
 # Output Format Templates
 
-The two deliverables, in order. Fill the braces. Keep prose tight and reading level low.
+The one-shot prompt and its glossary, in order. Every prompt carries its definition of done; a prompt without `Done means` and `Verify before done` fails the no-uncertainty gate. Fill the braces. Keep prose tight and reading level low.
 
 ---
 
@@ -21,6 +21,16 @@ A self-contained description the user can paste back to a builder agent. Lead wi
 - {parameter}: {chosen value} - {1-clause why}
 
 **Build notes:** {anything a builder must not get wrong - deprecations, version pins, gotchas surfaced in research}
+
+**In scope:** {list}
+**Out of scope:** {list}
+**Must not change:** {list}
+
+**Done means** (acceptance criteria - each one is a real-user walkthrough):
+1. {who} opens {X}, does {Y}, sees {Z}
+2. ...
+
+**Verify before done:** run every check above as {the real-user walkthrough, e.g. "open the running app at 1440 and 375 wide and click through"}. Report each as pass or fail with proof (screenshot, real output, measured number). Do not report done while any check fails. After two failed attempts on a check, stop and ask.
 ```
 
 Keep it dense and correct. This is the artifact, not an essay.
