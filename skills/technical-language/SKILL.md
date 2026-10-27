@@ -32,7 +32,7 @@ Then one line: **Field:** {the field whose experts solve this}. Decide both your
 
 ## 2. Read first
 
-Before asking anything, read what already exists: their message, pasted text, linked files, pages, repos, past sessions, and the memory files in section 10. Something the user pasted as an example is the Instance. A pasted path, session or link is a pointer: read what it points to. Every slot filled this way is a question the user never has to answer.
+Before asking anything, read what already exists: their message, pasted text, linked files, pages, repos, past sessions, the memory files in section 10, and above all **past research and canonical fact files** (earlier analyses, hiring or audience research, the user's source-of-truth documents such as a resume generator or spec). Asking a fact that a file already settles is a failure. Also read the user's full record, not a summary of it: a summary drops the proof that matters to a different reader. Something the user pasted as an example is the Instance. A pasted path, session or link is a pointer: read what it points to. Every slot filled this way is a question the user never has to answer.
 
 ## 3. Earn the expertise: the backtest
 
@@ -40,13 +40,15 @@ Saying "you are a 30-year expert" gives you an expert's vocabulary with a genera
 
 If `experts/{field}.md` exists (section 10) and its scorecard covers this kind of case, reuse it and skip to the scorecard line. Otherwise:
 
+0. **Factor map first.** List every factor that decides the outcome in this field, the way a practitioner would: for a message, who receives it, what that reader doubts, the proof that answers it, why now, the ask, format, timing, channel, and what the reader checks next (a profile, a site). The exam must test each factor, weighted by how much it moves the result. Testing only the easy, measurable factors (length, timing) and then acting sure about the rest is the most common failure of this skill.
 1. **Proven practitioners.** Find 2-4 people or teams whose results in this field are public and checkable (student outcomes, shipped products with numbers, published test results, a track record others cite). Popularity is not proof. Their published frameworks and words become your source and your vocabulary.
 2. **Known-answer exam.** Collect 10-20 real, documented cases where the outcome is on record: published A/B tests, postmortems, ad split tests, case studies with results, the practitioners' own worked examples, graded problems. For each, write the situation without the outcome.
 3. **Holdout.** Set aside at least a third of the cases before studying anything. Prefer cases newer than your training data or obscure enough that you have not memorized them; a famous case you already know the answer to tests memory, not judgment.
 4. **Call it, then grade it.** For each holdout case, write your call and the cues it rests on before looking at the outcome. Grade against what actually happened. No judge, no opinion: it matched or it didn't.
 5. **Novice traps.** List the mistakes the practitioners themselves say beginners make. Your calls must avoid every one.
 6. **Checklist backtest.** Write the checklist this field's expert uses to judge work. Run it on documented failures: it must catch the failure that actually happened. Run it on documented successes: it must not flag them.
-7. **Tested range.** Note which kinds of cases the exam covered. A case outside that range gets said out loud, not bluffed.
+7. **Tested range.** Note which factors and which kinds of cases the exam covered. A decision on an untested factor gets said out loud, not bluffed.
+8. **The reader.** For anything a person reads or judges, identify who that reader is (their seat: gatekeeper, hiring manager, buyer, end user) and what they doubt, from research on that reader in their own words. Every choice of content answers that reader's top doubt in that reader's vocabulary. Jargon the reader may not know (a "DAO" to a VC gatekeeper) fails.
 
 **Pass bar:** 80% or better on the holdout, every novice trap avoided, the checklist catches every documented failure. Below the bar: study more and retake once with fresh holdout cases. Still below: tell the user the field does not have enough on record, and what that means for trust.
 
@@ -54,7 +56,8 @@ If `experts/{field}.md` exists (section 10) and its scorecard covers this kind o
 
 **Show the user only the scorecard**, in at most 4 lines, with the first question:
 
-> **Backtest:** called {n}/{m} holdout cases from {practitioners}' published work. Missed: {case, one clause why}. Range: {kinds of cases covered}. Checklist caught {k}/{k} documented failures.
+> **Backtest:** called {n}/{m} holdout cases from {practitioners}' published work. Missed: {case, one clause why}. Checklist caught {k}/{k} documented failures.
+> **Factors:** {factor: tested / read from research / untested}, one line.
 
 The user does not read the exam. They read the score.
 
@@ -76,7 +79,7 @@ Build the model of the thing: how it works now (**as-is**), what it should do (*
 - Ask about a real past instance ("the last time this happened, what did it do?"), never a hypothetical.
 
 **Slots, in order**
-1. **System**: what the thing is, who uses it, what it does now.
+1. **System**: what the thing is, who uses it, what it does now, and whether the user wants one result or a template for several cases (ask early; widening scope late redoes the rounds).
 2. **Instance**: one specific time it went wrong, or one example of the ideal.
 3. **To-be**: what it should do instead, as something observable.
 4. **Cause**: what produces the gap.
@@ -109,7 +112,7 @@ Rules for every round:
 - **"Neither"**: lock whatever rule their reason states. No reason: ask "What's missing from both?" Two "neither" in a row on the same variable means the variable is wrong: switch to the one their reasons point to.
 - **Several pieces at once**: number each set and its options 1-3, so they can answer "1, 2, 1".
 - **Order**: the variable that changes the most of the result goes first.
-- **Honesty**: if a version needs a fact that isn't real (an invented number), flag it and keep it out of the final output.
+- **Honesty**: if a version needs a fact that isn't real (an invented number), flag it and keep it out of the final output. Recompute every number from raw counts (1 of 150 is 0.7%, not 1%). Check any proof the way the reader will see it before it goes in a round (open the link: a repo with 1 star is not proof).
 - **Stop**: when the next answer would not change the result, or after 10 rounds.
 
 **Visual rounds** (UI, layout, color, type, motion): render A and B side by side with `mcp__visualize__read_me` (modules `mockup` or `interactive`) then `mcp__visualize__show_widget`. Use their real values; flag any stand-in. Caption each panel with the variable and its value (`ease-out 200ms` vs `spring 400ms`). Motion loops in both.
@@ -222,6 +225,9 @@ Then save, without asking. Use `~/.claude/technical-language/` when it can be wr
 | Mistake | Fix |
 |---|---|
 | Playing the expert without the backtest | Scorecard first, then advice |
+| Backtesting only the easy, measurable factors | Factor map first; test each factor that moves the result |
+| Choosing content without naming the reader and their doubt | Answer the reader's top doubt in their words |
+| Missing past research and fact files the project already has | Read them before the first question |
 | Grading the backtest with an AI judge | Grade against what actually happened |
 | Holdout cases you have memorized | Newer or obscure cases |
 | A backtest bigger than the stakes | 5 cases for small asks, 15-20 for big ones |
