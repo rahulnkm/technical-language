@@ -7,7 +7,7 @@ You describe the thing in plain words. Claude asks you one question at a time un
 ## What it does
 
 1. **Topic line.** Decides whether you're pointing at a problem to remove or a result to build.
-2. **Elicitation.** One plain question per turn: what the thing is, one real example, what it should do, what causes the gap, how you'd know it worked, what must not change. For taste questions it shows you an A and a B built from your own material instead of asking.
+2. **Elicitation.** One plain question per turn: what the thing is, one real example, what it should do, what causes the gap, how you'd know it worked, what must not change. For taste questions it shows you a short A and B built from your own material, each with a line on what it goes for, and shows them where they will live (a feed, an inbox, a page) when that matters.
 3. **Names the professional** whose job this is, and the term they'd use.
 4. **Delivers.** Problem: the conventional name, the mechanism, your instance, a second instance, and the fix as a paste-ready rule. Solution: a parametric spec. No "clean", "tight" or "premium" - only values.
 5. **Teaches.** A glossary, plus the one or two sentences you could have typed to get the same result.
@@ -30,7 +30,7 @@ Then type `/technical-language` in Claude Code, or just describe something in la
 
 ## Notes
 
-- Visual A/B rounds and the parameter HUD use the inline widget tool (`mcp__visualize__*`) in the Claude desktop app. Without it, the skill describes both versions in text.
+- Visual A/B rounds and the parameter HUD use the inline widget tool (`mcp__visualize__*`) in the Claude desktop app. Without it, the skill renders a private Artifact or a local HTML file, and only falls back to text when nothing can render.
 - The skill answers from Claude's own knowledge first and only sends out research subagents if you say yes.
 
 ## License
